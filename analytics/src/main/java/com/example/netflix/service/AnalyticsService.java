@@ -66,6 +66,7 @@ public class AnalyticsService {
 
     //return top users,basically the users spend most time watching at platform
     //they didnt say me a limit but i'd say top 3 is enough
+
     public List<Entry<User,Integer>> topthreeSpentTime (){
 
 
@@ -77,6 +78,12 @@ public class AnalyticsService {
         return result;
     }
 
+    //movies average length by genre
+
+    public Map<Genre, Double> avgLengthByGenre(){
+        var result = db.movies.stream().collect(Collectors.groupingBy(Movie::getGenre, Collectors.averagingInt(Movie::getLength)));
+        return result;
+    } 
     //at this point, i've completed all the project's requirements
 
     
