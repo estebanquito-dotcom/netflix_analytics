@@ -4,9 +4,11 @@ package com.example.netflix.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.*;
+
 
 import com.example.netflix.model.Genre;
 import com.example.netflix.model.Movie;
@@ -86,11 +88,54 @@ public class AnalyticsService {
     } 
     //at this point, i've completed all the project's requirements
 
-    
+
+    //OPTIONAL REQUIREMENTS
+    //return the movies watched by user
+    //ill use the id how usually do in db
+    public Map<User, Set<String>> watchedMoviesByUser(int id){
+        //ill use mapping, to clean the output, and return the data needed only.
+        var result = db.views.stream().filter(r->r.getUser().getId()==id)
+        .collect(Collectors.groupingBy(View::getUser,Collectors
+        .mapping(v->v.getMovie().getTittle(),Collectors.toSet())));
+
+        return result;
 
 
+    }
+    //OPTIONAL 
+    //return most viewed genre
+    public List<Entry<Genre,Long>> mostViewedGenre (){
+        var result = db.views.stream().collect(Collectors
+            .groupingBy(v->v.getMovie().getGenre(),Collectors
+            .counting())).entrySet().stream()
+            .sorted(Map.Entry.<Genre,Long>comparingByValue().reversed()).toList();
 
+            return result;
+    }
 
-    
+    //OPTIONAL
+    //return most time played movie
+    public List<Entry<Movie,Integer>> mostTimePlayed(){
+        var result = db.views.stream()
+        .collect(Collectors.groupingBy(View::getMovie,Collectors.summingInt(View::getMinutes)))
+        .entrySet().stream()
+        .sorted(Map.Entry.<Movie,Integer>comparingByValue().reversed()).limit(5).toList();
+
+        return result;
+    }
+
+    //OPTIONAL
+    //return User who spent x minutes, watching movies
+    public List<String> minutesXSpentByUser(int time){
+
+        var result = db.views.stream()
+        .collect(Collectors.groupingBy(View::getUser,Collectors.summingInt(View::getMinutes)))
+        .entrySet().stream().filter(r->r.getValue()==time).map(r->r.getKey().getName()).toList();
+
+        return result;
+    }
+
+    //cause time im not going to implement the rest of optional challenges
+
 
 }
