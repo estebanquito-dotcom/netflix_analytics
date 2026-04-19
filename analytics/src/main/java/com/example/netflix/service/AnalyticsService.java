@@ -92,6 +92,7 @@ public class AnalyticsService {
     //OPTIONAL REQUIREMENTS
     //return the movies watched by user
     //ill use the id how usually do in db
+
     public Map<User, Set<String>> watchedMoviesByUser(int id){
         //ill use mapping, to clean the output, and return the data needed only.
         var result = db.views.stream().filter(r->r.getUser().getId()==id)
@@ -102,8 +103,10 @@ public class AnalyticsService {
 
 
     }
+    
     //OPTIONAL 
     //return most viewed genre
+
     public List<Entry<Genre,Long>> mostViewedGenre (){
         var result = db.views.stream().collect(Collectors
             .groupingBy(v->v.getMovie().getGenre(),Collectors
@@ -115,6 +118,7 @@ public class AnalyticsService {
 
     //OPTIONAL
     //return most time played movie
+
     public List<Entry<Movie,Integer>> mostTimePlayed(){
         var result = db.views.stream()
         .collect(Collectors.groupingBy(View::getMovie,Collectors.summingInt(View::getMinutes)))
@@ -126,6 +130,7 @@ public class AnalyticsService {
 
     //OPTIONAL
     //return User who spent x minutes, watching movies
+
     public List<String> minutesXSpentByUser(int time){
 
         var result = db.views.stream()
@@ -133,9 +138,10 @@ public class AnalyticsService {
         .entrySet().stream().filter(r->r.getValue()==time).map(r->r.getKey().getName()).toList();
 
         return result;
+
     }
 
-    //cause time im not going to implement the rest of optional challenges
+    //cause time im not going to implement the rest of optional challenges(methods)
 
 
 }

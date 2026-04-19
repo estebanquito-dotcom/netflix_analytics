@@ -1,0 +1,84 @@
+package com.example.netflix.ui;
+
+import java.util.Scanner;
+
+import com.example.netflix.service.AnalyticsService;
+
+public class ConsoleUi {
+    
+    private AnalyticsService service;
+    private Scanner sc;
+
+    public ConsoleUi(AnalyticsService service){
+        this.service = service;
+        this.sc = new Scanner(System.in);
+    }
+
+    public void iniciar(){
+
+        int option = -1;
+
+        var menu = """
+                    === NETFLIX ANALYTICS ===
+
+                    1. Most Viewed Movies
+                    2. Movies by Genre
+                    3. Totally Time Watched by User
+                    4. Top Users
+                    5. Average by Genre
+                    0. Exit
+                """;
+
+        do {
+
+            switch (option) {
+                case 1 -> showTopMovies();
+                case 2 -> showMoviesByGenre();
+                case 3 -> showTimeSpentByUser();
+                case 4 -> showTopUsers();
+                case 5 -> showAvgGenre();
+                
+                
+           
+                default -> option=0 ;
+                   
+            }
+
+            System.out.println(menu);
+            option = sc.nextInt();
+            
+        } while (option!=0);
+
+    }
+
+    public void showTopMovies(){
+        service.topMovies().forEach(r->System.out.println(r.getKey().getTittle()));
+
+    }
+    public void showMoviesByGenre(){
+        service.groupMoviesByGenre().forEach((genre,movies)->{
+
+            System.out.println("GENRE: "+ genre.name());
+
+            movies.forEach(movie->System.out.println(movie.getTittle()));
+
+
+        });
+    }
+    public void showTimeSpentByUser(){
+        service.spentTimeByUser().forEach((user,time)->{
+            System.out.println(user.getName()+" "+ time + " Minute/s");
+        });
+    }
+    public void showTopUsers(){
+        System.out.println("TOP 3 USERs: ");
+        service.topthreeSpentTime().forEach(user->System.out.println(" - "+user.getKey().getName()));
+    }
+    public void showAvgGenre(){
+        System.out.println("Length AVG by Genre: ");
+        service.avgLengthByGenre().forEach((genre,time)->{
+            System.out.println("Genre: "+genre.name()+ " AVG Time: "+time +" Minute/s");
+        });
+    }
+
+}
