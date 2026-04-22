@@ -66,4 +66,6 @@ analytics/
 
 ## Notes
 
-All optional challenges were implemented in the AnalyticsService layer. The console interface focuses on the core requirements due to time constraints.
+- All optional challenges were implemented in the AnalyticsService layer. The console interface focuses on the core requirements due to time constraints
+
+- The project uses a similar structure to spring projects, due to in the course they are introducing us to spring framework.
